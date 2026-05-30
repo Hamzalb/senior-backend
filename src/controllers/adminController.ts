@@ -1,4 +1,5 @@
 import asyncHandler from "express-async-handler";
+import bcrypt from "bcryptjs";
 import User from "../models/User";
 import Product from "../models/Product";
 
