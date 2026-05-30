@@ -2,8 +2,8 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "CommonJS",
-    "rootDir": "src", // <-- compile all TS under src/
-    "outDir": "src/dist", // <-- emit JS into src/dist/
+    "rootDir": "src",
+    "outDir": "dist",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true
