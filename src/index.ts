@@ -24,6 +24,7 @@ const httpServer = createServer(app);
 const FRONTEND_URLS = [
   "https://senior-frontend-master.vercel.app",
   "https://senior-frontend-eta.vercel.app",
+  "https://senior-frontend-murex.vercel.app",
   "http://localhost:3000",
   "http://localhost:5050",
   "http://192.168.1.108:3000",
