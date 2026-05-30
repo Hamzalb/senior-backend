@@ -144,6 +144,12 @@ const decideBarter = asyncHandler(async (req: any, res: any) => {
     throw new Error("Barter not found.");
   }
 
+  // Prevent re-deciding an already settled barter
+  if (barter.status !== "pending") {
+    res.status(400);
+    throw new Error(`This barter has already been ${barter.status}.`);
+  }
+
   // 3) Update item availability if approved, and set barter.status
   if (decision === "approved") {
     await Item.findByIdAndUpdate((barter.productOfferedId as any)._id, {
