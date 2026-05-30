@@ -22,6 +22,7 @@ const app = express();
 const httpServer = createServer(app);
 // --- Middleware Setup ---
 const FRONTEND_URLS = [
+  "https://senior-frontend-master.vercel.app",
   "https://senior-frontend-eta.vercel.app",
   "http://localhost:3000",
   "http://localhost:5050",
