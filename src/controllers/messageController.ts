@@ -67,20 +67,34 @@ export const sendMessage = asyncHandler(async (req: any, res: any) => {
     { path: "recipient", select: "username email profileImage" },
   ]);
 
-  // If it's a trade request, populate product info and create barter
+  // If it's a trade request, populate product info and optionally create barter
   if (msgType === 'trade_request' && offeredProductId && requestedProductId) {
-    // Create a barter request
-    const barter = await Barter.create({
-      productOfferedId: offeredProductId,
-      productRequestedId: requestedProductId,
-      offeredBy: senderId,
-      requestedFrom: recipientId,
-      status: "pending",
-    });
+    if (!barterId) {
+      // Validate category matching before creating a new barter
+      const [offered, requested] = await Promise.all([
+        Item.findById(offeredProductId),
+        Item.findById(requestedProductId),
+      ]);
+      if (!offered || !requested) {
+        res.status(404);
+        throw new Error("One or both products not found");
+      }
+      if (offered.category !== requested.category) {
+        res.status(400);
+        throw new Error("Both products must be in the same category to trade");
+      }
 
-    // Update message with barterId
-    message.barterId = barter._id;
-    await message.save();
+      const barter = await Barter.create({
+        productOfferedId: offeredProductId,
+        productRequestedId: requestedProductId,
+        offeredBy: senderId,
+        requestedFrom: recipientId,
+        status: "pending",
+      });
+
+      message.barterId = barter._id;
+      await message.save();
+    }
 
     // Populate product details
     populatedMessage = await message.populate([
