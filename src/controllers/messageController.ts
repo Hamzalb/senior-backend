@@ -102,6 +102,7 @@ export const sendMessage = asyncHandler(async (req: any, res: any) => {
       { path: "recipient", select: "username email profileImage" },
       { path: "offeredProductId", select: "title images category" },
       { path: "requestedProductId", select: "title images category" },
+      { path: "barterId", select: "status" },
     ]);
   }
 
