@@ -98,7 +98,10 @@ messageSchema.statics.getConversation = function(
     .skip(skip)
     .limit(limit)
     .populate("sender", "username email")
-    .populate("recipient", "username email");
+    .populate("recipient", "username email")
+    .populate("barterId", "status")
+    .populate("offeredProductId", "title images category")
+    .populate("requestedProductId", "title images category");
 };
 
 // Static method to get all conversations for a user
