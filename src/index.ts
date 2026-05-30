@@ -25,6 +25,7 @@ const FRONTEND_URLS = [
   "https://senior-frontend-master.vercel.app",
   "https://senior-frontend-eta.vercel.app",
   "https://senior-frontend-murex.vercel.app",
+  "https://senior-frontend-git-main-hamzalbs-projects.vercel.app",
   "http://localhost:3000",
   "http://localhost:5050",
   "http://192.168.1.108:3000",
@@ -39,7 +40,9 @@ app.use(
 
       // allow any local network IP (192.168.x.x or 10.x.x.x) for development
       const isLocalNetwork = /^http:\/\/(192\.168\.|10\.)[\d.]+:\d+$/.test(incomingOrigin);
-      if (FRONTEND_URLS.includes(incomingOrigin) || isLocalNetwork) {
+      // allow all vercel preview deployments for this project
+      const isVercelPreview = /^https:\/\/senior-frontend[^.]*\.vercel\.app$/.test(incomingOrigin);
+      if (FRONTEND_URLS.includes(incomingOrigin) || isLocalNetwork || isVercelPreview) {
         callback(null, incomingOrigin);
       } else {
         callback(

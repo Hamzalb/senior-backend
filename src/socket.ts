@@ -20,7 +20,8 @@ export const initSocket = (server: HttpServer) => {
           process.env.FRONTEND_URL || "https://senior-frontend-eta.vercel.app",
         ];
         const isLocalNetwork = /^http:\/\/(192\.168\.|10\.)[\d.]+:\d+$/.test(origin);
-        if (allowed.includes(origin) || isLocalNetwork) {
+        const isVercelPreview = /^https:\/\/senior-frontend[^.]*\.vercel\.app$/.test(origin);
+        if (allowed.includes(origin) || isLocalNetwork || isVercelPreview) {
           callback(null, true);
         } else {
           callback(new Error(`Socket CORS: origin ${origin} not allowed`));
