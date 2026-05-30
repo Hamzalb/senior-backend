@@ -43,6 +43,26 @@ export const getUserById = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Create user (admin)
+export const createUser = asyncHandler(async (req, res) => {
+  const { username, email, password, role } = req.body;
+
+  if (!username || !email || !password) {
+    res.status(400);
+    throw new Error("Username, email and password are required");
+  }
+
+  const exists = await User.findOne({ $or: [{ email }, { username }] });
+  if (exists) {
+    res.status(400);
+    throw new Error("A user with that email or username already exists");
+  }
+
+  const user = await User.create({ username, email, password, role: role || "customer" });
+  const { password: _pw, ...userWithoutPassword } = user.toObject();
+  res.status(201).json(userWithoutPassword);
+});
+
 // @desc Update user
 export const updateUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
@@ -51,9 +71,14 @@ export const updateUser = asyncHandler(async (req, res) => {
     user.username = req.body.username || user.username;
     user.email = req.body.email || user.email;
     if (req.body.role) user.role = req.body.role;
+    if (req.body.password) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(req.body.password, salt);
+    }
 
     const updatedUser = await user.save();
-    res.json(updatedUser);
+    const { password: _pw, ...userWithoutPassword } = updatedUser.toObject();
+    res.json(userWithoutPassword);
   } else {
     res.status(404);
     throw new Error("User not found");

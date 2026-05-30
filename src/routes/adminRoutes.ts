@@ -1,6 +1,7 @@
 import express from "express";
 import {
   getAllUsers,
+  createUser,
   deleteUser,
   getUserById,
   updateUser,
@@ -66,6 +67,7 @@ router.get("/products", getAllProducts);
 router.delete("/product/:id", deleteProduct);
 
 router.get("/users", getAllUsers);
+router.post("/users", createUser);
 router.get("/:id", getUserById);
 router.put("/:id", updateUser);
 router.delete("/:id", deleteUser);
