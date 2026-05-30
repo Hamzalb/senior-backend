@@ -14,6 +14,9 @@ import notificationRoutes from "./routes/notificationRoutes";
 import messageRoutes from "./routes/messageRoutes";
 import categoryRoutes from "./routes/categoryRoutes";
 import Category from "./models/Category";
+import User from "./models/User";
+import Item from "./models/Product";
+import Barter from "./models/Barter";
 import { notFound, errorHandler } from "./middleware/errorMiddleware";
 import { initSocket } from "./socket";
 
@@ -68,6 +71,32 @@ app.use(cookieParser());
 // --- Health Check Route ---
 app.get("/", (req, res) => {
   res.send("Backend is running ✨");
+});
+
+// --- Public Stats (no auth) ---
+app.get("/api/stats", async (_req, res) => {
+  try {
+    const [users, approvedBarters, totalBarters, categoryStats] = await Promise.all([
+      User.countDocuments(),
+      Barter.countDocuments({ status: "approved" }),
+      Barter.countDocuments(),
+      Item.aggregate([
+        { $group: { _id: "$category", count: { $sum: 1 } } },
+        { $sort: { count: -1 } },
+      ]),
+    ]);
+    res.json({
+      users,
+      approvedBarters,
+      totalBarters,
+      productsByCategory: categoryStats.map((c: any) => ({
+        category: c._id ?? "Unknown",
+        count: c.count,
+      })),
+    });
+  } catch {
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
 // 3) Your routes (MUST come *after* the static line)
