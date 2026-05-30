@@ -22,7 +22,7 @@ export const getCategories = asyncHandler(async (req, res) => {
     { $group: { _id: { $toLower: "$category" }, count: { $sum: 1 } } },
   ]);
   const countMap: Record<string, number> = {};
-  counts.forEach(({ _id, count }) => { if (_id) countMap[_id] = count; });
+  counts.forEach(({ _id, count }: { _id: string; count: number }) => { if (_id) countMap[_id] = count; });
 
   const result = categories.map((cat) => ({
     ...cat,
