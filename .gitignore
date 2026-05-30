@@ -1,0 +1,20 @@
+# Dependencies
+/node_modules
+
+# Build artifacts
+src/dist/
+
+# Environment variables
+.env
+
+# Optional: Logs or temporary files
+# logs/
+# *.log
+# tmp/
+
+# Optional: If you are using VS Code and want to ignore workspace settings
+.vscode/
+
+# Optional: If you are using nodemon or similar tools that create logs
+# *.nodemon.log
+/src/uploads
