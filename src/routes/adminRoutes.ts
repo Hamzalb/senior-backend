@@ -18,13 +18,24 @@ const router = express.Router();
 router.use(protect, isAdmin);
 router.get("/stats", async (req, res) => {
   try {
-    const usersCount = await User.countDocuments();
-    const productsCount = await Item.countDocuments();
-    const bartersCount = await Barter.countDocuments({ status: "pending" });
+    const [usersCount, productsCount, bartersPending, bartersApproved, bartersDeclined, categoryStats] = await Promise.all([
+      User.countDocuments(),
+      Item.countDocuments(),
+      Barter.countDocuments({ status: "pending" }),
+      Barter.countDocuments({ status: "approved" }),
+      Barter.countDocuments({ status: "declined" }),
+      Item.aggregate([{ $group: { _id: "$category", count: { $sum: 1 } } }, { $sort: { count: -1 } }]),
+    ]);
     res.json({
       users: usersCount,
       products: productsCount,
-      barters: bartersCount,
+      barters: bartersPending,
+      bartersByStatus: [
+        { status: "Pending", count: bartersPending },
+        { status: "Approved", count: bartersApproved },
+        { status: "Declined", count: bartersDeclined },
+      ],
+      productsByCategory: categoryStats.map((c: any) => ({ category: c._id ?? "Unknown", count: c.count })),
     });
   } catch (err) {
     res.status(500).json({ error: "Server error" });
