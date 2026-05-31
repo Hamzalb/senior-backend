@@ -82,6 +82,7 @@ export const updateProfile = asyncHandler(async (req: any, res) => {
   const user = await User.findById(userId);
   if (!user) throw new Error("User not found");
 
+  if (!user.password) throw new Error("This account uses Google sign-in. Use forgot password to set a password.");
   const isMatch = await bcrypt.compare(oldPassword, user.password);
   if (!isMatch) throw new Error("Old password is incorrect");
 
