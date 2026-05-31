@@ -46,11 +46,11 @@ export const register = async (req: any, res: any) => {
     try {
       await sendEmail({
         to:      email,
-        subject: "Verify your Dakesh account",
-        text:    `Welcome to Dakesh!\n\nVerify your email here:\n${verifyUrl}\n\nLink expires in 24 hours.`,
+        subject: "Verify your yalla nbadel account",
+        text:    `Welcome to yalla nbadel!\n\nVerify your email here:\n${verifyUrl}\n\nLink expires in 24 hours.`,
         html: `
           <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:32px;background:#0f0f18;color:#f1f1f1;border-radius:16px">
-            <h2 style="color:#c084fc;margin-bottom:8px">Verify your Dakesh account</h2>
+            <h2 style="color:#c084fc;margin-bottom:8px">Verify your yalla nbadel account</h2>
             <p style="color:#cbd5e1">Hi <strong>${username}</strong>, click the button below to confirm your email address.</p>
             <a href="${verifyUrl}"
                style="display:inline-block;margin:24px 0;padding:14px 28px;background:linear-gradient(135deg,#a855f7,#7c3aed);color:#fff;font-weight:600;border-radius:10px;text-decoration:none">
@@ -178,7 +178,7 @@ export const forgotPassword = async (req: any, res: any) => {
   try {
     await sendEmail({
       to:      user.email,
-      subject: "Dakesh — password reset request",
+      subject: "yalla nbadel — password reset request",
       text:    `You requested a password reset.\n\nClick or paste this link in your browser (expires in 15 minutes):\n\n${resetUrl}\n\nIf you didn't request this, ignore this email.`,
       html: `
         <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:32px;background:#0f0f18;color:#f1f1f1;border-radius:16px">

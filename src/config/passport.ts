@@ -5,7 +5,7 @@ import User from "../models/User";
 
 const CALLBACK_URL =
   process.env.GOOGLE_CALLBACK_URL ||
-  "https://dakesh-backend.onrender.com/api/auth/google/callback";
+  `${process.env.BACKEND_URL || "https://dakesh-backend.onrender.com"}/api/auth/google/callback`;
 
 passport.use(
   new GoogleStrategy(
