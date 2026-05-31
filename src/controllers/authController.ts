@@ -192,11 +192,12 @@ export const forgotPassword = async (req: any, res: any) => {
         </div>`,
     });
     res.status(200).json({ success: true, message: "Reset link sent to your email" });
-  } catch {
+  } catch (emailErr: any) {
+    console.error("Reset email error:", emailErr?.message || emailErr);
     user.resetPasswordToken  = undefined;
     user.resetPasswordExpire = undefined;
     await user.save({ validateBeforeSave: false });
-    res.status(500).json({ message: "Email could not be sent. Check email config." });
+    res.status(500).json({ message: `Email error: ${emailErr?.message || "unknown"}` });
   }
 };
 
