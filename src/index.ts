@@ -75,6 +75,36 @@ app.get("/", (req, res) => {
   res.send("Backend is running ✨");
 });
 
+// --- Contact Form ---
+app.post("/api/contact", async (req: any, res: any) => {
+  const { name, email, message } = req.body;
+  if (!name || !email || !message) {
+    return res.status(400).json({ error: "Name, email and message are required" });
+  }
+  try {
+    const { sendEmail } = await import("./utils/sendMail");
+    const adminEmail = process.env.EMAIL_USER;
+    if (!adminEmail) throw new Error("EMAIL_USER not configured");
+    await sendEmail({
+      to: adminEmail,
+      subject: `[yalla nbadel] New message from ${name}`,
+      text: `From: ${name} <${email}>\n\n${message}`,
+      html: `
+        <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:32px;background:#0f0f18;color:#f1f1f1;border-radius:16px">
+          <h2 style="color:#c084fc">New contact message</h2>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <hr style="border-color:#ffffff20;margin:16px 0"/>
+          <p style="white-space:pre-wrap">${message}</p>
+        </div>`,
+    });
+    res.json({ success: true });
+  } catch (err: any) {
+    console.error("Contact email error:", err);
+    res.status(500).json({ error: "Failed to send message" });
+  }
+});
+
 // --- Public Stats (no auth) ---
 app.get("/api/stats", async (_req, res) => {
   try {
