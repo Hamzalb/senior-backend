@@ -15,14 +15,14 @@ export const sendEmail = async ({ to, subject, text, html }: MailOptions) => {
     throw new Error("EMAIL_USER and EMAIL_PASS environment variables are not set");
   }
 
+  // Use port 465 (SSL) — more reliable on cloud hosts than 587 (STARTTLS)
   const transporter = nodemailer.createTransport({
-    service: "gmail",
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
+    host:   "smtp.gmail.com",
+    port:   465,
+    secure: true,
     auth: {
       user: emailUser,
-      pass: emailPass,
+      pass: emailPass.replace(/\s/g, ""), // strip spaces from app password
     },
   });
 
