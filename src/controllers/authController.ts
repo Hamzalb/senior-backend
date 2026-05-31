@@ -150,7 +150,7 @@ export const googleCallback = async (req: any, res: any) => {
     userId:   String(user._id),
   });
 
-  res.redirect(`${FRONTEND_URL}/login?${params.toString()}`);
+  res.redirect(`${FRONTEND_URL}/api/auth/callback?${params.toString()}`);
 };
 
 // ── forgot password ────────────────────────────────────────────────────────
