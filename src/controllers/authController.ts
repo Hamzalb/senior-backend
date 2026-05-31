@@ -5,7 +5,7 @@ import crypto from "crypto";
 import { sendEmail } from "../utils/sendMail";
 
 const FRONTEND_URL =
-  process.env.FRONTEND_URL || "https://senior-frontend-eta.vercel.app";
+  process.env.FRONTEND_URL || "https://senior-frontend-murex.vercel.app";
 
 // ── helpers ────────────────────────────────────────────────────────────────
 
