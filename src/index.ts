@@ -17,6 +17,7 @@ import Category from "./models/Category";
 import User from "./models/User";
 import Item from "./models/Product";
 import Barter from "./models/Barter";
+import passport from "./config/passport";
 import { notFound, errorHandler } from "./middleware/errorMiddleware";
 import { initSocket } from "./socket";
 
@@ -67,6 +68,7 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
+app.use(passport.initialize());
 
 // --- Health Check Route ---
 app.get("/", (req, res) => {

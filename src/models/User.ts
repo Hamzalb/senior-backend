@@ -17,9 +17,14 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: false,
     minlength: 6,
   },
+  avatar: { type: String },
+  googleId: { type: String, sparse: true },
+  isVerified: { type: Boolean, default: false },
+  emailVerificationToken: { type: String },
+  emailVerificationExpire: { type: Date },
   resetPasswordToken: { type: String },
   resetPasswordExpire: { type: Date },
   role: {
@@ -34,13 +39,14 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+  if (!this.isModified("password") || !this.password) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
 
 userSchema.methods.matchPassword = async function (enteredPassword: string) {
+  if (!this.password) return false;
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
